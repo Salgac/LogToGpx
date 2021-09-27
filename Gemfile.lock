@@ -1,11 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    gpx (1.0.0)
+      nokogiri (~> 1.7)
+      rake
+    nokogiri (1.12.4-x86_64-linux)
+      racc (~> 1.4)
+    racc (1.5.2)
+    rake (13.0.6)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  gpx
 
 BUNDLED WITH
    2.2.17

@@ -3,6 +3,19 @@
 require "bundler/setup"
 Bundler.require(:default)
 
+#include a patch for GPX::Point
+require_relative "gpx/gpx_point_patch"
+unless GPX::Point.included_modules.include? GPXPointPatch
+  GPX::Point.send(:include, GPXPointPatch)
+end
+
+#include a patch for xml printing method
+require_relative "gpx/gpx_file_patch"
+unless GPX::GPXFile.included_modules.include? GPXFilePatch
+  GPX::GPXFile.send(:include, GPXFilePatch)
+end
+
+#load files and export data
 ARGV.each do |file|
   file_name, extension = file.split(".")
   puts "Parsing file \"#{file}\"…"
@@ -29,6 +42,8 @@ ARGV.each do |file|
         lon: lon,
         elevation: hmsl,
         speed: gspeed,
+        course: crs,
+        hacc: hacc,
       })
     end
   end

@@ -50,6 +50,7 @@ module GPXFilePatch
 
                       #!PATCH main here
                       xml.speed p.speed unless p.speed.nil?
+                      xml.vtram p.vtram unless p.vtram.nil?
                       xml.course p.course unless p.course.nil?
                       xml.hacc p.hacc unless p.hacc.nil?
                       #!PATCH end

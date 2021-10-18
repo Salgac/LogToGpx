@@ -20,11 +20,12 @@ module GPXPointPatch
 
       #!PATCH main here
       #add new attributes
-      self.class.module_eval { attr_accessor :hacc, :course }
+      self.class.module_eval { attr_accessor :hacc, :course, :vtram }
 
       #set values
       @hacc = opts[:hacc]
       @course = opts[:course]
+      @vtram = opts[:vtram]
       #!PATCH end
     end
   end

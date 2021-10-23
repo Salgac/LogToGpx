@@ -61,7 +61,7 @@ ARGV.each do |file|
         lon: lon,
         elevation: hmsl,
         speed: gspeed,
-        vtram: vtram.nil? ? "" : vtram,
+        vtram: vtram.nil? ? "" : vtram.gsub(",", "."),
         course: crs,
         hacc: hacc,
       })

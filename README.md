@@ -1,6 +1,6 @@
-# LogToPgx
+# LogToGpx
 
-LogToPgx is a simple tool to convert log data of a certain syntax into broadwide `.pgx` format. This tool was created for data analysis of tram line gps collection, to easily convert collected data into a more usable format.
+LogToGpx is a simple tool to convert log data of a certain syntax into broadwide `.gpx` format. This tool was created for data analysis of tram line gps collection, to easily convert collected data into a more usable format.
 
 ## Usage
 
@@ -28,3 +28,7 @@ Values are delimited by `;`, key followed by value:
  - GSPEED - current speed in cm/s
  - CRS  - course
  - HACC - horizontal accuracy in micrometers
+
+## Output file syntax
+
+Script produces a `.gpx` format files, according to the [official GPX 1.0 implementation specifications](https://www.topografix.com/gpx_manual.asp), enhanced with several more optional trackpoint elements (needed for transfer of tram speed as `<vtram>` and `<hacc>` for horizontal accuracy). Since the added elements are optional, they should not interfere with other software.

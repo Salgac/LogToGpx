@@ -15,10 +15,16 @@ unless GPX::GPXFile.included_modules.include? GPXFilePatch
   GPX::GPXFile.send(:include, GPXFilePatch)
 end
 
+#no selected file edgecase
+if ARGV.length == 0
+  puts "No file in ARGV. Please specify a file path."
+  return
+end
+
 #load files and export data
 ARGV.each do |file|
   file_name, extension = file.split(".")
-  puts "Parsing file \"#{file}\"…"
+  print "Parsing file \"#{file}\"…"
 
   gpx_points = []
 
@@ -26,7 +32,7 @@ ARGV.each do |file|
 
     #open tram file and create a hash with time key and speed value
     time = f.readline.split(";")
-    tram_file = Time.parse(time[0]).day == 17 ? "../data/tram17.txt" : "../data/tram18.txt"
+    tram_file = Time.parse(time[0]).day == 17 ? "./data/tram17.txt" : "./data/tram18.txt"
 
     tram_file_hash = Hash.new
     tram_lines = File.readlines(tram_file)
@@ -36,7 +42,9 @@ ARGV.each do |file|
       _, _, _, fileTime, _, speed, _ = line.encode("UTF-8", :invalid => :replace).split("\t")
 
       if speed != ""
-        tram_file_hash[fileTime.split(",")[0]] = speed
+        # 2 second offset for tram speed time difference
+        stamp = (Time.parse(fileTime) - 2).strftime("%H:%M:%S")
+        tram_file_hash[stamp] = speed
       end
     end
 
@@ -49,8 +57,8 @@ ARGV.each do |file|
       lat = lat.to_f / 10000000
       lon = lon.to_f / 10000000
       hmsl = hmsl.to_f / 1000
-      gspeed = gspeed.to_f / 27.778
-      vtram = tram_file_hash[time_stamp.to_s[11..18]]
+      gspeed = gspeed.to_f / 100
+      vtram = tram_file_hash[time_stamp.to_s[11..18]].to_f / 3.6
       crs = crs #?
       hacc = hacc.to_f / 1000000
 
@@ -61,7 +69,7 @@ ARGV.each do |file|
         lon: lon,
         elevation: hmsl,
         speed: gspeed,
-        vtram: vtram.nil? ? "" : vtram.gsub(",", "."),
+        vtram: vtram.nil? ? "" : vtram.round(2),
         course: crs,
         hacc: hacc,
       })
@@ -79,4 +87,5 @@ ARGV.each do |file|
   gpx_file.tracks = [gpx_track]
 
   gpx_file.write(file_name + ".gpx")
+  puts "\r\"#{file_name}.gpx\" saved successfully."
 end

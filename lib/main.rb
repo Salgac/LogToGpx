@@ -23,8 +23,15 @@ end
 
 #load files and export data
 ARGV.each do |file|
-  file_name, extension = file.split(".")
-  print "Parsing file \"#{file}\"…"
+  #check extension
+  if File.extname(file) != ".log"
+    puts "#{File.basename(file)} must be a \".log\" file."
+    next
+  end
+
+  #prepare file
+  file_name = file.delete_suffix(".log")
+  print "Parsing file \"#{File.basename(file)}\"…"
 
   gpx_points = []
 
@@ -83,9 +90,11 @@ ARGV.each do |file|
 
   gpx_segment.points = gpx_points
   gpx_track.segments = [gpx_segment]
-  gpx_track.name = file_name
+  gpx_track.name = File.basename(file).delete_suffix(".log")
   gpx_file.tracks = [gpx_track]
 
   gpx_file.write(file_name + ".gpx")
   puts "\r\"#{file_name}.gpx\" saved successfully."
 end
+
+puts "Finished"

@@ -14,7 +14,7 @@ The program will convert files from file paths in arguments, and write `.gpx` fi
 
 ## Log file syntax
 
-Files with `.log` extension this converter uses need to have a strict line format specified bellow, where each line represents one track point.
+Files with `.log` extension this converter uses need to have a strict line format specified bellow, where each line represents one track point. [Example file](./data/example.log) with such format is provided for guideline. 
 
 ```
 2021-04-17 20:18:10,041 - INFO - ;LAT;481580718;LON;171071553;HMSL;175024;GSPEED;1;CRS;0;HACC;1675

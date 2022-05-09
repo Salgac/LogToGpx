@@ -6,7 +6,7 @@ LogToGpx is a simple tool to convert log data of a certain syntax into broadwide
 
 To use the tool, simply run the `main.rb` file in command line (providing you have ruby installed), with `.log` file paths in arguments, like so:
 
-```
+```bash
 ruby lib/main.rb exampleFile1.log foo/exampleFile2.log
 ```
 
@@ -32,3 +32,14 @@ Values are delimited by `;`, key followed by value:
 ## Output file syntax
 
 Script produces a `.gpx` format files, according to the [official GPX 1.0 implementation specifications](https://www.topografix.com/gpx_manual.asp), enhanced with several more optional trackpoint elements (needed for transfer of tram speed as `<vtram>` and `<hacc>` for horizontal accuracy). Since the added elements are optional, they should not interfere with other software.
+
+
+## Speed offset calculation utility
+
+A utility script `offset.rb` is also provided for a quick calculation of speed offset and horizontal accuracy in a converted `.gpx` file. To run this script, provide a `.gpx` file path in arguments, similarly to `main.rb` script. The script will extract all speed and accuracy data from all files provided in the scripts aruments, and print out the average speed offset, together with max and min horizontal accuracy. A reccomended use is with a set of `.gpx` files, for calculations across several files. To do this, use `*.gpx` as an argument.
+
+Run the `offset.rb` script with:
+
+```bash
+ruby lib/offset.rb exampleFile1.gpx foo/*.gpx
+```

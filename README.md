@@ -4,6 +4,8 @@ LogToGpx is a simple tool to convert log data of a certain syntax into broadwide
 
 ## Usage
 
+Several gem dependencies are required to be installed before usage, see [setup](#setup) before use.
+
 To use the tool, simply run the `main.rb` file in command line (providing you have ruby installed), with `.log` file paths in arguments, like so:
 
 ```bash
@@ -42,4 +44,16 @@ Run the `offset.rb` script with:
 
 ```bash
 ruby lib/offset.rb exampleFile1.gpx foo/*.gpx
+```
+
+# Setup
+
+This script uses several gems, that are needed for execution. These gems are listed in `Gemfile`. Install these gems before using the script (sudo permissions might be needed):
+
+```bash
+# install bundler
+gem install bundler
+
+# use bundler to install gems in Gemfile
+bundle install
 ```

@@ -20,7 +20,7 @@ end
 ARGV.each do |file|
   # check extension
   if File.extname(file) != ".gpx"
-    puts "#{File.basename(file)} must be a \".gpx\" file."
+    puts "#{File.basename(file)} must be a \".gpx\" file. Skipping..."
     next
   end
 
@@ -43,6 +43,11 @@ ARGV.each do |file|
     # push into common Array
     entries << { lat: lat, lon: lon, vtram: vtram, vgps: vgps, hacc: hacc }
   end
+end
+
+if entries.length == 0
+  puts "No valid entries"
+  return
 end
 
 ###############

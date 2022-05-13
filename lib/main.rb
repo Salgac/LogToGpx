@@ -38,24 +38,28 @@ ARGV.each do |file|
   File.open(file, "r") do |f|
 
     #open tram file and create a hash with time key and speed value
-    time = f.readline.split(";")
-    day = Time.parse(time[0]).day
-    tram_file = day == 17 ? "./data/tram17.txt" : day == 18 ? "./data/tram18.txt" : nil
+    begin
+      time = f.readline.split(";")
+      day = Time.parse(time[0]).day
+      tram_file = day == 17 ? "./data/tram17.txt" : day == 18 ? "./data/tram18.txt" : nil
 
-    if tram_file != nil
-      tram_file_hash = Hash.new
-      tram_lines = File.readlines(tram_file)
-      tram_lines.each_with_index do |line, index|
-        next if index == 0 || index == 1
+      if tram_file != nil
+        tram_file_hash = Hash.new
+        tram_lines = File.readlines(tram_file)
+        tram_lines.each_with_index do |line, index|
+          next if index == 0 || index == 1
 
-        _, _, _, fileTime, _, speed, _ = line.encode("UTF-8", :invalid => :replace).split("\t")
+          _, _, _, fileTime, _, speed, _ = line.encode("UTF-8", :invalid => :replace).split("\t")
 
-        if speed != ""
-          # 2 second offset for tram speed time difference
-          stamp = (Time.parse(fileTime) - 2).strftime("%H:%M:%S")
-          tram_file_hash[stamp] = speed
+          if speed != ""
+            # 2 second offset for tram speed time difference
+            stamp = (Time.parse(fileTime) - 2).strftime("%H:%M:%S")
+            tram_file_hash[stamp] = speed
+          end
         end
       end
+    rescue => e
+      next
     end
 
     #extract point info from file
@@ -64,14 +68,18 @@ ARGV.each do |file|
       time, _, lat, _, lon, _, hmsl, _, gspeed, _, crs, _, hacc = line.split(";")
 
       #convert data
-      time_stamp = Time.parse(time[0..22].sub(" ", "T") + "Z")
-      lat = lat.to_f / 10000000
-      lon = lon.to_f / 10000000
-      hmsl = hmsl.to_f / 1000
-      gspeed = gspeed.to_f / 100
-      vtram = tram_file != nil ? tram_file_hash[time_stamp.to_s[11..18]].to_f / 3.6 : nil
-      crs = crs
-      hacc = hacc.to_f / 1000000
+      begin
+        time_stamp = Time.parse(time[0..22].sub(" ", "T") + "Z")
+        lat = lat.to_f / 10000000
+        lon = lon.to_f / 10000000
+        hmsl = hmsl.to_f / 1000
+        gspeed = gspeed.to_f / 100
+        vtram = tram_file != nil ? tram_file_hash[time_stamp.to_s[11..18]].to_f / 3.6 : nil
+        crs = crs
+        hacc = hacc.to_f / 1000000
+      rescue => e
+        next
+      end
 
       #print into gpx point structure
       gpx_points << GPX::Point.new({
